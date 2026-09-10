@@ -374,18 +374,6 @@ td { color: var(--text-muted); }
   padding-left: 1rem; position: relative;
 }
 .tl-list li::before { content: '•'; position: absolute; left: 0; color: var(--accent); }
-/* Support cards */
-.support-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem;
-}
-.support-card {
-  background: var(--glass); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 1.5rem; text-align: center;
-  transition: all 0.25s;
-}
-.support-card:hover { border-color: var(--border-glow); transform: translateY(-2px); }
-.support-card h3 { font-size: 1rem; margin-bottom: 0.35rem; }
-.support-card p { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1rem; }
 /* Permission cards */
 .perm-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem;
@@ -494,14 +482,14 @@ footer {
         <li><a href="#/slash" data-page="slash" data-i18n="nav_slash">Slash Commands</a></li>
         <li><a href="#/permissions" data-page="permissions" data-i18n="nav_permissions">Permissions & Access</a></li>
         <li><a href="#/changelog" data-page="changelog" data-i18n="nav_changelog">Changelog</a></li>
-        <li><a href="#/support" data-page="support" data-i18n="nav_support">Support</a></li>
+        <li><a href="https://discord.gg/ntBsr6srWn" target="_blank" rel="noopener" data-i18n="nav_support">Support</a></li>
       </ul>
       <div class="nav-actions">
         <div class="lang-switch">
           <button class="lang-btn active" data-lang="en">EN</button>
           <button class="lang-btn" data-lang="id">ID</button>
         </div>
-        <a href="https://discord.com/oauth2/authorize?client_id=1478496950503342295" target="_blank" rel="noopener" class="btn btn-primary nav-cta" data-i18n="btn_add_server">Add to Server</a>
+        <a href="#" class="btn btn-primary nav-cta" data-i18n="btn_add_server">Add to Server</a>
         <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
       </div>
     </div>
@@ -516,8 +504,8 @@ footer {
     <a href="#/slash" data-page="slash" data-i18n="nav_slash">Slash Commands</a>
     <a href="#/permissions" data-page="permissions" data-i18n="nav_permissions">Permissions & Access</a>
     <a href="#/changelog" data-page="changelog" data-i18n="nav_changelog">Changelog</a>
-    <a href="#/support" data-page="support" data-i18n="nav_support">Support</a>
-    <a href="https://discord.com/oauth2/authorize?client_id=1478496950503342295" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top:0.75rem;justify-content:center;" data-i18n="btn_add_server">Add to Server</a>
+    <a href="https://discord.gg/ntBsr6srWn" target="_blank" rel="noopener" data-i18n="nav_support">Support</a>
+    <a href="#" class="btn btn-primary" style="margin-top:0.75rem;justify-content:center;" data-i18n="btn_add_server">Add to Server</a>
   </div>
 
   <main>
@@ -529,7 +517,7 @@ footer {
         <p class="subtitle" data-i18n="hero_sub">Discord Server Management Bot</p>
         <p class="desc" data-i18n="hero_desc">My Tools is a powerful Discord server management bot designed to simplify server creation, organization, moderation utilities, and bulk management.</p>
         <div class="hero-btns">
-          <a href="https://discord.com/oauth2/authorize?client_id=1478496950503342295" target="_blank" rel="noopener" class="btn btn-primary" data-i18n="btn_add_server">Add to Server</a>
+          <a href="#" class="btn btn-primary" data-i18n="btn_add_server">Add to Server</a>
           <a href="https://discord.gg/ntBsr6srWn" target="_blank" rel="noopener" class="btn btn-secondary" data-i18n="btn_official_server">Official Server</a>
           <a href="#/utilities" class="btn btn-ghost" data-i18n="btn_view">View Commands</a>
         </div>
@@ -817,36 +805,6 @@ footer {
         </div>
       </div>
     </div>
-
-    <!-- SUPPORT -->
-    <div class="page" id="page-support">
-      <div class="page-header">
-        <h1 data-i18n="sup_title">Support</h1>
-        <p data-i18n="sup_sub">Get help, report issues, or request features.</p>
-      </div>
-      <div class="support-grid">
-        <div class="support-card">
-          <h3 data-i18n="sup_doc">Documentation</h3>
-          <p data-i18n="sup_doc_d">Browse full feature docs on this site.</p>
-          <a href="#/" class="btn btn-secondary" data-i18n="sup_browse">Browse</a>
-        </div>
-        <div class="support-card">
-          <h3 data-i18n="sup_server">Support Server</h3>
-          <p data-i18n="sup_server_d">Join the community for help.</p>
-          <a href="#" class="btn btn-secondary" data-i18n="sup_join">Join (placeholder)</a>
-        </div>
-        <div class="support-card">
-          <h3 data-i18n="sup_bug">Report a Bug</h3>
-          <p data-i18n="sup_bug_d">Found an issue? Let us know.</p>
-          <a href="#" class="btn btn-secondary" data-i18n="sup_report">Report (placeholder)</a>
-        </div>
-        <div class="support-card">
-          <h3 data-i18n="sup_feat">Request a Feature</h3>
-          <p data-i18n="sup_feat_d">Suggest improvements.</p>
-          <a href="#" class="btn btn-secondary" data-i18n="sup_request">Request (placeholder)</a>
-        </div>
-      </div>
-    </div>
   </main>
 
   <footer>
@@ -862,7 +820,7 @@ footer {
         <a href="#/slash" data-i18n="nav_slash">Slash Commands</a>
         <a href="#/permissions" data-i18n="nav_permissions">Permissions</a>
         <a href="#/changelog" data-i18n="nav_changelog">Changelog</a>
-        <a href="#/support" data-i18n="nav_support">Support</a>
+        <a href="https://discord.gg/ntBsr6srWn" target="_blank" rel="noopener" data-i18n="nav_support">Support</a>
       </div>
       <div class="footer-copy">© 2026 My Tools. All rights reserved.</div>
     </div>
@@ -936,12 +894,7 @@ const i18n = {
     cl_title: "Changelog", cl_sub: "Current release: v1.4.1 · Stable",
     cl_f1: "New features and refinements", cl_f2: "Improvements to batch operations",
     cl_f3: "Bug fixes and stability updates", cl_f4: "Command updates and polish",
-    sup_title: "Support", sup_sub: "Get help, report issues, or request features.",
-    sup_doc: "Documentation", sup_doc_d: "Browse full feature docs on this site.",
-    sup_browse: "Browse", sup_server: "Support Server", sup_server_d: "Join the community for help.",
-    sup_join: "Join (placeholder)", sup_bug: "Report a Bug", sup_bug_d: "Found an issue? Let us know.",
-    sup_report: "Report (placeholder)", sup_feat: "Request a Feature", sup_feat_d: "Suggest improvements.",
-    sup_request: "Request (placeholder)", footer_tag: "Discord Server Management Bot"
+    footer_tag: "Discord Server Management Bot"
   },
   id: {
     logo: "My Tools", nav_home: "Beranda", nav_features: "Fitur ▾", nav_create: "Perintah Buat",
@@ -1007,17 +960,12 @@ const i18n = {
     cl_title: "Catatan Perubahan", cl_sub: "Rilis saat ini: v1.4.1 · Stabil",
     cl_f1: "Fitur baru dan penyempurnaan", cl_f2: "Peningkatan operasi batch",
     cl_f3: "Perbaikan bug dan pembaruan stabilitas", cl_f4: "Pembaruan perintah dan polish",
-    sup_title: "Dukungan", sup_sub: "Dapatkan bantuan, laporkan masalah, atau minta fitur.",
-    sup_doc: "Dokumentasi", sup_doc_d: "Jelajahi dokumentasi fitur lengkap di situs ini.",
-    sup_browse: "Jelajahi", sup_server: "Server Dukungan", sup_server_d: "Bergabung dengan komunitas untuk bantuan.",
-    sup_join: "Gabung (placeholder)", sup_bug: "Laporkan Bug", sup_bug_d: "Menemukan masalah? Beritahu kami.",
-    sup_report: "Laporkan (placeholder)", sup_feat: "Minta Fitur", sup_feat_d: "Sarankan peningkatan.",
-    sup_request: "Minta (placeholder)", footer_tag: "Bot Manajemen Server Discord"
+    footer_tag: "Bot Manajemen Server Discord"
   }
 };
 
 let currentLang = 'en';
-const pages = ['home','create','categories','rename','delete','utilities','slash','permissions','changelog','support'];
+const pages = ['home','create','categories','rename','delete','utilities','slash','permissions','changelog'];
 
 function setLang(lang) {
   currentLang = lang;
