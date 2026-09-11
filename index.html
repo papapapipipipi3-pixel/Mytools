@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Tools — Discord Server Management Bot</title>
+<title>My Tools — Discord Server Management Bot v1.4.2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -40,24 +40,28 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 }
-/* Animated background */
+body.menu-open { overflow: hidden; }
+
+/* Animated background GPU Optimized */
 .bg-orbs {
   position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  transform: translate3d(0,0,0);
 }
 .bg-orbs::before, .bg-orbs::after {
-  content: ''; position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15;
+  content: ''; position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15;
+  will-change: transform; transform: translate3d(0,0,0);
 }
 .bg-orbs::before {
-  width: 600px; height: 600px; background: #6366f1;
-  top: -200px; left: -100px; animation: float 20s ease-in-out infinite;
+  width: 500px; height: 500px; background: #6366f1;
+  top: -150px; left: -100px; animation: float 20s ease-in-out infinite;
 }
 .bg-orbs::after {
-  width: 500px; height: 500px; background: #06b6d4;
-  bottom: -150px; right: -100px; animation: float 25s ease-in-out infinite reverse;
+  width: 450px; height: 450px; background: #06b6d4;
+  bottom: -100px; right: -100px; animation: float 25s ease-in-out infinite reverse;
 }
 @keyframes float {
-  0%,100% { transform: translate(0,0); }
-  50% { transform: translate(40px,30px); }
+  0%,100% { transform: translate3d(0,0,0); }
+  50% { transform: translate3d(30px,20px,0); }
 }
 .grid-bg {
   position: fixed; inset: 0; pointer-events: none; z-index: 0;
@@ -72,15 +76,15 @@ body {
 /* Navbar */
 .navbar {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(5,5,8,0.75);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  background: rgba(5,5,8,0.85);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
   padding: 0 1.5rem;
 }
 .nav-inner {
-  max-width: 1200px; margin: 0 auto;
+  max-width: 1300px; margin: 0 auto;
   display: flex; align-items: center; justify-content: space-between;
-  height: 64px; gap: 1rem;
+  height: 64px; gap: 0.75rem;
 }
 .logo {
   font-weight: 700; font-size: 1.15rem; letter-spacing: -0.02em;
@@ -88,32 +92,15 @@ body {
 }
 .logo span { color: var(--accent); }
 .nav-links {
-  display: flex; align-items: center; gap: 0.25rem; list-style: none;
+  display: flex; align-items: center; gap: 0.15rem; list-style: none;
 }
-.nav-links a, .nav-dropdown-btn {
-  color: var(--text-muted); text-decoration: none; font-size: 0.875rem; font-weight: 500;
-  padding: 0.45rem 0.75rem; border-radius: 8px; transition: all 0.2s;
-  background: none; border: none; cursor: pointer; font-family: inherit;
+.nav-links a {
+  color: var(--text-muted); text-decoration: none; font-size: 0.825rem; font-weight: 500;
+  padding: 0.4rem 0.6rem; border-radius: 8px; transition: all 0.2s;
 }
-.nav-links a:hover, .nav-dropdown-btn:hover,
-.nav-links a.active, .nav-dropdown-btn.active {
+.nav-links a:hover, .nav-links a.active {
   color: var(--text); background: var(--glass);
 }
-.nav-dropdown { position: relative; }
-.nav-dropdown-menu {
-  position: absolute; top: calc(100% + 8px); left: 0;
-  background: rgba(12,12,18,0.95); backdrop-filter: blur(20px);
-  border: 1px solid var(--border); border-radius: 12px;
-  padding: 0.5rem; min-width: 200px; display: none;
-  box-shadow: var(--shadow); z-index: 50;
-}
-.nav-dropdown:hover .nav-dropdown-menu,
-.nav-dropdown.open .nav-dropdown-menu { display: block; }
-.nav-dropdown-menu a {
-  display: block; padding: 0.5rem 0.75rem; border-radius: 8px;
-  color: var(--text-muted); font-size: 0.875rem; text-decoration: none;
-}
-.nav-dropdown-menu a:hover { background: var(--glass); color: var(--text); }
 .nav-actions { display: flex; align-items: center; gap: 0.5rem; }
 .lang-switch {
   display: flex; background: var(--glass); border: 1px solid var(--border);
@@ -132,27 +119,26 @@ body {
 /* Mobile menu */
 .mobile-menu {
   display: none; position: fixed; inset: 0; top: 64px; z-index: 90;
-  background: rgba(5,5,8,0.97); backdrop-filter: blur(20px);
+  background: rgba(5,5,8,0.98); backdrop-filter: blur(16px);
   padding: 1.5rem; flex-direction: column; gap: 0.5rem;
   overflow-y: auto;
 }
 .mobile-menu.open { display: flex; }
-.mobile-menu a, .mobile-menu button {
+.mobile-menu a {
   color: var(--text-muted); text-decoration: none; font-size: 1rem;
   padding: 0.75rem 1rem; border-radius: 10px; background: none; border: none;
   text-align: left; cursor: pointer; font-family: inherit;
 }
 .mobile-menu a:hover, .mobile-menu a.active { background: var(--glass); color: var(--text); }
-.mobile-sub { padding-left: 1rem; display: flex; flex-direction: column; gap: 0.25rem; }
+
 /* Main */
 main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
-.page { display: none; animation: fadeIn 0.35s ease; }
-.page.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.25s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
 /* Hero */
-.hero {
-  text-align: center; padding: 3.5rem 0 2.5rem;
-}
+.hero { text-align: center; padding: 3.5rem 0 2.5rem; }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 0.5rem;
   background: var(--glass); border: 1px solid var(--border);
@@ -165,12 +151,8 @@ main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 2.5rem 
   letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 0.5rem;
 }
 .hero h1 span { background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.hero .subtitle {
-  font-size: 1.15rem; color: var(--text-muted); margin-bottom: 0.75rem;
-}
-.hero .desc {
-  max-width: 560px; margin: 0 auto 2rem; color: var(--text-dim); font-size: 0.95rem;
-}
+.hero .subtitle { font-size: 1.15rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+.hero .desc { max-width: 560px; margin: 0 auto 2rem; color: var(--text-dim); font-size: 0.95rem; }
 .hero-btns { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; }
 .btn {
   display: inline-flex; align-items: center; gap: 0.5rem;
@@ -183,14 +165,12 @@ main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 2.5rem 
   color: white; box-shadow: 0 4px 20px rgba(99,102,241,0.35);
 }
 .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(99,102,241,0.45); }
-.btn-secondary {
-  background: var(--glass); color: var(--text); border: 1px solid var(--border);
-}
+.btn-secondary { background: var(--glass); color: var(--text); border: 1px solid var(--border); }
 .btn-secondary:hover { background: var(--glass-hover); border-color: rgba(255,255,255,0.15); }
 .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid transparent; }
 .btn-ghost:hover { color: var(--text); background: var(--glass); }
 .nav-cta { padding: 0.5rem 1.1rem; font-size: 0.85rem; white-space: nowrap; }
-@media (max-width: 900px) { .nav-cta { display: none; } }
+
 /* Stats */
 .stats {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
@@ -199,73 +179,50 @@ main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 2.5rem 
 .stat-card {
   background: var(--glass); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 1.25rem 1rem; text-align: center;
-  backdrop-filter: blur(12px);
 }
 .stat-card .value { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
 .stat-card .label { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.25rem; }
-/* Section */
-.section-title {
-  font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em;
-  margin-bottom: 0.35rem;
-}
-.section-sub { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 1.75rem; }
+
 /* Feature cards grid */
-.feature-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem;
-}
+.section-title { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 0.35rem; }
+.section-sub { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 1.75rem; }
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
 .feature-card {
   background: var(--glass); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 1.5rem; text-decoration: none;
-  color: inherit; transition: all 0.25s; backdrop-filter: blur(12px);
-  display: flex; flex-direction: column; gap: 0.5rem;
+  color: inherit; transition: all 0.2s; display: flex; flex-direction: column; gap: 0.5rem;
 }
 .feature-card:hover {
   background: var(--glass-hover); border-color: var(--border-glow);
-  transform: translateY(-3px); box-shadow: 0 12px 40px rgba(99,102,241,0.12);
+  transform: translateY(-2px);
 }
 .feature-card h3 { font-size: 1.05rem; font-weight: 600; }
 .feature-card p { font-size: 0.85rem; color: var(--text-dim); flex: 1; }
 .feature-card .arrow { color: var(--accent); font-size: 0.85rem; margin-top: 0.5rem; }
+
 /* Page header */
 .page-header { margin-bottom: 2.5rem; }
-.page-header h1 {
-  font-size: clamp(1.75rem, 4vw, 2.25rem); font-weight: 700;
-  letter-spacing: -0.03em; margin-bottom: 0.4rem;
-}
+.page-header h1 { font-size: clamp(1.75rem, 4vw, 2.25rem); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.4rem; }
 .page-header p { color: var(--text-muted); max-width: 560px; }
+
 /* Command cards */
 .cmd-grid { display: grid; gap: 1.25rem; }
 .cmd-card {
   background: var(--glass); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 1.5rem;
-  backdrop-filter: blur(12px); transition: all 0.25s;
+  border-radius: var(--radius); padding: 1.5rem; transition: border-color 0.2s;
 }
-.cmd-card:hover { border-color: var(--border-glow); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
-.cmd-card.danger {
-  border-color: var(--danger-border); background: var(--danger-bg);
-}
-.cmd-header {
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;
-}
-.cmd-name {
-  font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
-  font-size: 1.05rem; font-weight: 600; color: var(--accent-2);
-}
+.cmd-card:hover { border-color: var(--border-glow); }
+.cmd-card.danger { border-color: var(--danger-border); background: var(--danger-bg); }
+.cmd-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+.cmd-name { font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace; font-size: 1.05rem; font-weight: 600; color: var(--accent-2); }
 .cmd-badges { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-.badge {
-  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.04em;
-  padding: 0.2rem 0.55rem; border-radius: 6px; text-transform: uppercase;
-}
+.badge { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.2rem 0.55rem; border-radius: 6px; text-transform: uppercase; }
 .badge-admin { background: rgba(129,140,248,0.15); color: var(--accent); }
 .badge-owner { background: rgba(251,191,36,0.15); color: #fbbf24; }
 .badge-prefix { background: rgba(52,211,153,0.12); color: var(--success); }
 .cmd-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; }
 .cmd-section { margin-bottom: 0.85rem; }
-.cmd-section-label {
-  font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
-  letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 0.3rem;
-}
+.cmd-section-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 0.3rem; }
 .code-block {
   background: rgba(0,0,0,0.35); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 0.7rem 1rem;
@@ -281,84 +238,18 @@ main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 2.5rem 
 }
 .copy-btn:hover { color: var(--text); border-color: var(--accent); }
 .copy-btn.copied { color: var(--success); border-color: var(--success); }
-/* Flow diagram */
-.flow {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
-  gap: 0.5rem; margin: 2rem 0; padding: 1.5rem;
-  background: var(--glass); border: 1px solid var(--border); border-radius: var(--radius);
-}
-.flow-step {
-  background: rgba(129,140,248,0.1); border: 1px solid rgba(129,140,248,0.25);
-  border-radius: 10px; padding: 0.6rem 1rem; font-size: 0.85rem; font-weight: 500;
-}
-.flow-arrow { color: var(--text-dim); font-size: 1.1rem; }
-/* Rename preview */
-.rename-preview {
-  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
-  margin-top: 0.75rem; padding: 0.75rem 1rem;
-  background: rgba(0,0,0,0.25); border-radius: var(--radius-sm);
-}
-.rename-old { color: var(--text-dim); text-decoration: line-through; }
-.rename-arrow { color: var(--accent); }
-.rename-new { color: var(--success); font-weight: 500; }
-/* Confirm mock */
-.confirm-mock {
-  margin-top: 1rem; padding: 1.25rem;
-  background: rgba(0,0,0,0.3); border: 1px solid var(--danger-border);
-  border-radius: var(--radius-sm); max-width: 320px;
-}
-.confirm-mock p { font-size: 0.9rem; margin-bottom: 0.75rem; }
-.confirm-btns { display: flex; gap: 0.5rem; }
-.confirm-btns button {
-  flex: 1; padding: 0.5rem; border-radius: 8px; font-size: 0.8rem;
-  font-weight: 600; cursor: pointer; border: none; font-family: inherit;
-}
-.btn-cancel { background: var(--glass); color: var(--text-muted); border: 1px solid var(--border) !important; }
-.btn-yes { background: rgba(248,113,113,0.2); color: var(--danger); }
+
 /* Table */
 .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
-table {
-  width: 100%; border-collapse: collapse; font-size: 0.9rem;
-}
-th, td {
-  padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border);
-}
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
 th { color: var(--text-dim); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
 td { color: var(--text-muted); }
 .check { color: var(--success); }
-.cross { color: var(--danger); }
-/* Comparison */
-.compare {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0;
-}
-.compare-box {
-  background: var(--glass); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 1.25rem;
-}
-.compare-box h4 { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
-.compare-box code {
-  font-family: ui-monospace, monospace; font-size: 0.9rem; color: var(--accent-2);
-}
-/* Help mock */
-.help-mock {
-  background: #1e1f22; border-radius: 12px; padding: 1rem; max-width: 400px;
-  border: 1px solid #2b2d31; margin-top: 1rem;
-}
-.help-mock select {
-  width: 100%; background: #2b2d31; border: 1px solid #3f4147;
-  color: #dbdee1; padding: 0.5rem; border-radius: 6px; font-size: 0.85rem;
-  font-family: inherit;
-}
-.help-mock .help-content {
-  margin-top: 0.75rem; padding: 0.75rem; background: #2b2d31;
-  border-radius: 6px; font-size: 0.85rem; color: #b5bac1;
-}
+
 /* Timeline */
 .timeline { position: relative; padding-left: 1.5rem; margin-top: 1.5rem; }
-.timeline::before {
-  content: ''; position: absolute; left: 5px; top: 0; bottom: 0;
-  width: 2px; background: var(--border);
-}
+.timeline::before { content: ''; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; background: var(--border); }
 .tl-item { position: relative; margin-bottom: 2rem; }
 .tl-item::before {
   content: ''; position: absolute; left: -1.5rem; top: 6px;
@@ -369,89 +260,41 @@ td { color: var(--text-muted); }
 .tl-version { font-weight: 700; font-size: 1.1rem; }
 .tl-status { font-size: 0.8rem; color: var(--success); margin-left: 0.5rem; }
 .tl-list { margin-top: 0.75rem; list-style: none; }
-.tl-list li {
-  font-size: 0.9rem; color: var(--text-muted); padding: 0.25rem 0;
-  padding-left: 1rem; position: relative;
-}
+.tl-list li { font-size: 0.9rem; color: var(--text-muted); padding: 0.25rem 0; padding-left: 1rem; position: relative; }
 .tl-list li::before { content: '•'; position: absolute; left: 0; color: var(--accent); }
+
 /* Permission cards */
-.perm-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem;
-  margin-top: 1.5rem;
-}
-.perm-card {
-  background: var(--glass); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 1.5rem;
-}
+.perm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.perm-card { background: var(--glass); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
 .perm-card h3 { font-size: 1rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
 .perm-card p { font-size: 0.85rem; color: var(--text-muted); }
-/* Search */
-.search-box {
-  position: relative; margin-bottom: 2rem;
-}
-.search-box input {
-  width: 100%; background: var(--glass); border: 1px solid var(--border);
-  border-radius: 12px; padding: 0.85rem 1rem 0.85rem 2.75rem;
-  color: var(--text); font-size: 0.95rem; font-family: inherit;
-  outline: none; transition: border-color 0.2s;
-}
-.search-box input:focus { border-color: var(--accent); }
-.search-box input::placeholder { color: var(--text-dim); }
-.search-icon {
-  position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
-  color: var(--text-dim); font-size: 1rem;
-}
-.search-results {
-  position: absolute; top: calc(100% + 6px); left: 0; right: 0;
-  background: rgba(12,12,18,0.98); border: 1px solid var(--border);
-  border-radius: 12px; max-height: 320px; overflow-y: auto;
-  display: none; z-index: 40; box-shadow: var(--shadow);
-}
-.search-results.open { display: block; }
-.search-item {
-  padding: 0.75rem 1rem; cursor: pointer; border-bottom: 1px solid var(--border);
-  transition: background 0.15s;
-}
-.search-item:hover { background: var(--glass); }
-.search-item:last-child { border-bottom: none; }
-.search-item .name { font-family: ui-monospace, monospace; color: var(--accent-2); font-size: 0.9rem; }
-.search-item .desc { font-size: 0.8rem; color: var(--text-dim); }
+
 /* Toast */
 .toast {
   position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200;
   background: rgba(12,12,18,0.95); border: 1px solid var(--border);
   border-radius: 10px; padding: 0.75rem 1.25rem; font-size: 0.875rem;
   color: var(--text); box-shadow: var(--shadow);
-  transform: translateY(80px); opacity: 0; transition: all 0.3s;
+  transform: translateY(80px); opacity: 0; transition: all 0.25s ease;
   pointer-events: none;
 }
 .toast.show { transform: none; opacity: 1; }
+
 /* Footer */
-footer {
-  border-top: 1px solid var(--border); padding: 2.5rem 1.5rem;
-  background: rgba(0,0,0,0.3);
-}
-.footer-inner {
-  max-width: 1200px; margin: 0 auto;
-  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem;
-}
+footer { border-top: 1px solid var(--border); padding: 2.5rem 1.5rem; background: rgba(0,0,0,0.3); }
+.footer-inner { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem; }
 .footer-brand h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.25rem; }
 .footer-brand p { font-size: 0.85rem; color: var(--text-dim); }
-.footer-nav { display: flex; flex-wrap: wrap; gap: 1.25rem; }
-.footer-nav a {
-  color: var(--text-muted); text-decoration: none; font-size: 0.875rem;
-}
+.footer-nav { display: flex; flex-wrap: wrap; gap: 1rem; }
+.footer-nav a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; }
 .footer-nav a:hover { color: var(--text); }
-.footer-copy {
-  width: 100%; margin-top: 1.5rem; padding-top: 1.5rem;
-  border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-dim);
-}
+.footer-copy { width: 100%; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--text-dim); }
+
 /* Responsive */
-@media (max-width: 900px) {
-  .nav-links { display: none; }
+@media (max-width: 1024px) {
+  .nav-links, .nav-cta { display: none; }
   .hamburger { display: block; }
   .stats { grid-template-columns: repeat(2, 1fr); }
-  .compare { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
   .stats { grid-template-columns: 1fr 1fr; }
@@ -469,33 +312,30 @@ footer {
       <a href="#/" class="logo" data-i18n="logo">My <span>Tools</span></a>
       <ul class="nav-links">
         <li><a href="#/" data-page="home" data-i18n="nav_home">Home</a></li>
-        <li class="nav-dropdown">
-          <button class="nav-dropdown-btn" data-i18n="nav_features">Features ▾</button>
-          <div class="nav-dropdown-menu">
-            <a href="#/create" data-page="create" data-i18n="nav_create">Create Commands</a>
-            <a href="#/categories" data-page="categories" data-i18n="nav_categories">Category Creation</a>
-            <a href="#/rename" data-page="rename" data-i18n="nav_rename">Rename Commands</a>
-            <a href="#/delete" data-page="delete" data-i18n="nav_delete">Delete Commands</a>
-            <a href="#/utilities" data-page="utilities" data-i18n="nav_utilities">Utility Commands</a>
-          </div>
-        </li>
-        <li><a href="#/slash" data-page="slash" data-i18n="nav_slash">Slash Commands</a></li>
-        <li><a href="#/permissions" data-page="permissions" data-i18n="nav_permissions">Permissions & Access</a></li>
+        <li><a href="#/moderation" data-page="moderation" data-i18n="nav_moderation">Moderation</a></li>
+        <li><a href="#/create" data-page="create" data-i18n="nav_create">Create</a></li>
+        <li><a href="#/categories" data-page="categories" data-i18n="nav_categories">Categories</a></li>
+        <li><a href="#/rename" data-page="rename" data-i18n="nav_rename">Rename</a></li>
+        <li><a href="#/delete" data-page="delete" data-i18n="nav_delete">Delete</a></li>
+        <li><a href="#/utilities" data-page="utilities" data-i18n="nav_utilities">Utilities</a></li>
+        <li><a href="#/slash" data-page="slash" data-i18n="nav_slash">Slash</a></li>
+        <li><a href="#/permissions" data-page="permissions" data-i18n="nav_permissions">Permissions</a></li>
         <li><a href="#/changelog" data-page="changelog" data-i18n="nav_changelog">Changelog</a></li>
-        <li><a href="https://discord.gg/ntBsr6srWn" target="_blank" rel="noopener" data-i18n="nav_support">Support</a></li>
       </ul>
       <div class="nav-actions">
         <div class="lang-switch">
           <button class="lang-btn active" data-lang="en">EN</button>
           <button class="lang-btn" data-lang="id">ID</button>
         </div>
-        <a href="#" class="btn btn-primary nav-cta" data-i18n="btn_add_server">Add to Server</a>
+        <a href="https://discord.com/oauth2/authorize?client_id=1478496950503342295" target="_blank" rel="noopener" class="btn btn-primary nav-cta" data-i18n="btn_add_server">Add to Server</a>
         <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
       </div>
     </div>
   </nav>
+
   <div class="mobile-menu" id="mobileMenu">
     <a href="#/" data-page="home" data-i18n="nav_home">Home</a>
+    <a href="#/moderation" data-page="moderation" data-i18n="nav_moderation">Moderation</a>
     <a href="#/create" data-page="create" data-i18n="nav_create">Create Commands</a>
     <a href="#/categories" data-page="categories" data-i18n="nav_categories">Category Creation</a>
     <a href="#/rename" data-page="rename" data-i18n="nav_rename">Rename Commands</a>
@@ -504,125 +344,145 @@ footer {
     <a href="#/slash" data-page="slash" data-i18n="nav_slash">Slash Commands</a>
     <a href="#/permissions" data-page="permissions" data-i18n="nav_permissions">Permissions & Access</a>
     <a href="#/changelog" data-page="changelog" data-i18n="nav_changelog">Changelog</a>
-    <a href="https://discord.gg/ntBsr6srWn" target="_blank" rel="noopener" data-i18n="nav_support">Support</a>
-    <a href="#" class="btn btn-primary" style="margin-top:0.75rem;justify-content:center;" data-i18n="btn_add_server">Add to Server</a>
+    <a href="https://discord.gg/kF6AG4Cq7s" target="_blank" rel="noopener" data-i18n="nav_support">Official Server</a>
+    <a href="https://discord.com/oauth2/authorize?client_id=1478496950503342295" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top:0.75rem;justify-content:center;" data-i18n="btn_add_server">Add to Server</a>
   </div>
 
   <main>
-    <!-- HOME -->
+    <!-- HOME PAGE -->
     <div class="page" id="page-home">
       <section class="hero">
-        <div class="hero-badge"><span class="dot"></span> <span data-i18n="hero_badge">v1.4.1 · Stable</span></div>
+        <div class="hero-badge"><span class="dot"></span> <span data-i18n="hero_badge">v1.4.2 · Complete System Update</span></div>
         <h1>MY <span>TOOLS</span></h1>
-        <p class="subtitle" data-i18n="hero_sub">Discord Server Management Bot</p>
+        <p class="subtitle" data-i18n="hero_sub">Discord Server Management & Moderation Bot</p>
         <p class="desc" data-i18n="hero_desc">My Tools is a powerful Discord server management bot designed to simplify server creation, organization, moderation utilities, and bulk management.</p>
         <div class="hero-btns">
-          <a href="#" class="btn btn-primary" data-i18n="btn_add_server">Add to Server</a>
-          <a href="https://discord.gg/ntBsr6srWn" target="_blank" rel="noopener" class="btn btn-secondary" data-i18n="btn_official_server">Official Server</a>
-          <a href="#/utilities" class="btn btn-ghost" data-i18n="btn_view">View Commands</a>
+          <a href="https://discord.com/oauth2/authorize?client_id=1478496950503342295" target="_blank" rel="noopener" class="btn btn-primary" data-i18n="btn_add_server">Add to Server</a>
+          <a href="https://discord.gg/kF6AG4Cq7s" target="_blank" rel="noopener" class="btn btn-secondary" data-i18n="btn_official_server">Official Server</a>
+          <a href="#/moderation" class="btn btn-ghost" data-i18n="btn_view">View Commands</a>
         </div>
       </section>
       <div class="stats">
-        <div class="stat-card"><div class="value">1.4.1</div><div class="label" data-i18n="stat_version">Current Version</div></div>
+        <div class="stat-card"><div class="value">1.4.2</div><div class="label" data-i18n="stat_version">Current Version</div></div>
         <div class="stat-card"><div class="value" data-i18n="stat_stable">Stable</div><div class="label" data-i18n="stat_status">Status</div></div>
         <div class="stat-card"><div class="value">10</div><div class="label" data-i18n="stat_batch">Maximum Batch Operations</div></div>
         <div class="stat-card"><div class="value">EN / ID</div><div class="label" data-i18n="stat_lang">Languages</div></div>
       </div>
-      <h2 class="section-title" data-i18n="explore_title">Explore My Tools</h2>
-      <p class="section-sub" data-i18n="explore_sub">Jump into any feature area.</p>
+      <h2 class="section-title" data-i18n="explore_title">Explore My Tools Categories</h2>
+      <p class="section-sub" data-i18n="explore_sub">Select a category below to view all commands.</p>
       <div class="feature-grid">
+        <a href="#/moderation" class="feature-card"><h3 data-i18n="nav_moderation">Moderation Commands</h3><p data-i18n="card_mod">Kick, ban, mute, unmute, unban, and purge messages.</p><span class="arrow">→</span></a>
         <a href="#/create" class="feature-card"><h3 data-i18n="nav_create">Create Commands</h3><p data-i18n="card_create">Batch create roles, channels, voice, forums & categories.</p><span class="arrow">→</span></a>
         <a href="#/categories" class="feature-card"><h3 data-i18n="nav_categories">Category Creation</h3><p data-i18n="card_cat">Create channels directly inside categories.</p><span class="arrow">→</span></a>
         <a href="#/rename" class="feature-card"><h3 data-i18n="nav_rename">Rename Commands</h3><p data-i18n="card_rename">Batch rename channels and categories.</p><span class="arrow">→</span></a>
         <a href="#/delete" class="feature-card"><h3 data-i18n="nav_delete">Delete Commands</h3><p data-i18n="card_delete">Safe deletion with confirmation protection.</p><span class="arrow">→</span></a>
-        <a href="#/utilities" class="feature-card"><h3 data-i18n="nav_utilities">Utility Commands</h3><p data-i18n="card_util">Lists, info, language & interactive help.</p><span class="arrow">→</span></a>
+        <a href="#/utilities" class="feature-card"><h3 data-i18n="nav_utilities">Utility Commands</h3><p data-i18n="card_util">Lists, server info, language & interactive help.</p><span class="arrow">→</span></a>
         <a href="#/slash" class="feature-card"><h3 data-i18n="nav_slash">Slash Commands</h3><p data-i18n="card_slash">Almost every command also works as slash.</p><span class="arrow">→</span></a>
-        <a href="#/permissions" class="feature-card"><h3 data-i18n="nav_permissions">Permissions & Access</h3><p data-i18n="card_perm">Who can use which features.</p><span class="arrow">→</span></a>
+        <a href="#/permissions" class="feature-card"><h3 data-i18n="nav_permissions">Permissions & Access</h3><p data-i18n="card_perm">Detailed breakdown of Owner & Admin command access.</p><span class="arrow">→</span></a>
       </div>
     </div>
 
-    <!-- CREATE -->
+    <!-- MODERATION PAGE -->
+    <div class="page" id="page-moderation">
+      <div class="page-header">
+        <h1 data-i18n="mod_title">Moderation Commands</h1>
+        <p data-i18n="mod_sub">Essential moderation tools to keep your server safe. Requires Administrator permission.</p>
+      </div>
+      <div class="cmd-grid">
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tkick / /kick</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_kick">Kick a member from the server with an optional reason. Protected against self and hierarchy actions.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tkick @member [reason]</code><button class="copy-btn" data-copy="Tkick @member Spamming">Copy</button></div></div>
+        </div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tban / /ban</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_ban">Ban a user from the server by mention or ID, with optional reason and message deletion days.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tban @user [reason] [delete_days]</code><button class="copy-btn" data-copy="Tban @user Breaking rules 1">Copy</button></div></div>
+        </div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tmute / /mute</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_mute">Timeout / Mute a member for a specified duration in minutes (max 28 days).</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tmute @member [minutes] [reason]</code><button class="copy-btn" data-copy="Tmute @member 10 Excessive caps">Copy</button></div></div>
+        </div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tunmute / /unmute</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_unmute">Remove timeout / unmute a previously muted member.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tunmute @member [reason]</code><button class="copy-btn" data-copy="Tunmute @member Appeal accepted">Copy</button></div></div>
+        </div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tunban / /unban</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_unban">Unban a user from the server using their numeric User ID.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tunban user:123456789012345678 [reason]</code><button class="copy-btn" data-copy="Tunban 123456789012345678 Unbanned">Copy</button></div></div>
+        </div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tpurge / /purge</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_purge">Bulk delete messages in the channel (1 to 500) with confirmation dialog.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tpurge 1-500</code><button class="copy-btn" data-copy="Tpurge 50">Copy</button></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CREATE PAGE -->
     <div class="page" id="page-create">
       <div class="page-header">
         <h1 data-i18n="create_title">Create Commands</h1>
         <p data-i18n="create_sub">Create multiple Discord server resources quickly with batch commands.</p>
       </div>
-      <div class="search-box">
-        <span class="search-icon">⌕</span>
-        <input type="text" id="searchCreate" placeholder="Search commands…" data-i18n-placeholder="search_ph">
-        <div class="search-results" id="searchResultsCreate"></div>
-      </div>
       <div class="cmd-grid">
-        <div class="cmd-card" data-cmd="Tcreateroles">
-          <div class="cmd-header"><span class="cmd-name">Tcreateroles</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_createroles">Create up to 10 Discord roles at once. Each role receives a random color. Designed for fast server setup.</p>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreateroles name1, name2, …</code><button class="copy-btn" data-copy="Tcreateroles name1, name2">Copy</button></div></div>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_example">Example</div><div class="code-block"><code>Tcreateroles Admin, Moderator, Member</code><button class="copy-btn" data-copy="Tcreateroles Admin, Moderator, Member">Copy</button></div></div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tcreateroles / /createroles</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_createroles">Create up to 10 Discord roles at once. Each role receives a random color.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreateroles raw:name1, name2</code><button class="copy-btn" data-copy="Tcreateroles Admin, Moderator, Member">Copy</button></div></div>
         </div>
-        <div class="cmd-card" data-cmd="Tcreatechannel">
-          <div class="cmd-header"><span class="cmd-name">Tcreatechannel</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX</span></div></div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tcreatechannel / /createchannel</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
           <p class="cmd-desc" data-i18n="cmd_createchannel">Create up to 10 text channels at once.</p>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreatechannel name1, name2, …</code><button class="copy-btn" data-copy="Tcreatechannel name1, name2">Copy</button></div></div>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_example">Example</div><div class="code-block"><code>Tcreatechannel general, chat, media, memes</code><button class="copy-btn" data-copy="Tcreatechannel general, chat, media, memes">Copy</button></div></div>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreatechannel raw:name1, name2</code><button class="copy-btn" data-copy="Tcreatechannel general, chat, media">Copy</button></div></div>
         </div>
-        <div class="cmd-card" data-cmd="Tcreatevoice">
-          <div class="cmd-header"><span class="cmd-name">Tcreatevoice</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_createvoice">Create up to 10 voice channels.</p>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreatevoice name1, name2, …</code><button class="copy-btn" data-copy="Tcreatevoice name1, name2">Copy</button></div></div>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_example">Example</div><div class="code-block"><code>Tcreatevoice General, Gaming, Music</code><button class="copy-btn" data-copy="Tcreatevoice General, Gaming, Music">Copy</button></div></div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tcreatevoice / /createvoice</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_createvoice">Create up to 10 voice channels at once.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreatevoice raw:name1, name2</code><button class="copy-btn" data-copy="Tcreatevoice General, Gaming, Music">Copy</button></div></div>
         </div>
-        <div class="cmd-card" data-cmd="Tcreateforum">
-          <div class="cmd-header"><span class="cmd-name">Tcreateforum</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_createforum">Create up to 10 forum channels.</p>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreateforum name1, name2, …</code><button class="copy-btn" data-copy="Tcreateforum name1, name2">Copy</button></div></div>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_example">Example</div><div class="code-block"><code>Tcreateforum Support, Suggestions, Discussion</code><button class="copy-btn" data-copy="Tcreateforum Support, Suggestions, Discussion">Copy</button></div></div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tcreateforum / /createforum</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_createforum">Create up to 10 forum channels at once.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreateforum raw:name1, name2</code><button class="copy-btn" data-copy="Tcreateforum Support, Suggestions">Copy</button></div></div>
         </div>
-        <div class="cmd-card" data-cmd="Tcreatecategories">
-          <div class="cmd-header"><span class="cmd-name">Tcreatecategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_createcategories">Create up to 10 categories.</p>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreatecategories name1, name2, …</code><button class="copy-btn" data-copy="Tcreatecategories name1, name2">Copy</button></div></div>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_example">Example</div><div class="code-block"><code>Tcreatecategories INFORMATION, COMMUNITY, STAFF</code><button class="copy-btn" data-copy="Tcreatecategories INFORMATION, COMMUNITY, STAFF">Copy</button></div></div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tcreatecategories / /createcategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_createcategories">Create up to 10 categories at once.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreatecategories raw:name1, name2</code><button class="copy-btn" data-copy="Tcreatecategories INFORMATION, COMMUNITY">Copy</button></div></div>
         </div>
       </div>
     </div>
 
-    <!-- CATEGORIES -->
+    <!-- CATEGORIES PAGE -->
     <div class="page" id="page-categories">
       <div class="page-header">
         <h1 data-i18n="cat_title">Create Inside a Category</h1>
-        <p data-i18n="cat_sub">These commands create channels directly inside a specified category. If the category does not exist, My Tools automatically creates it first.</p>
-      </div>
-      <div class="flow">
-        <div class="flow-step" data-i18n="flow1">Input Category</div>
-        <span class="flow-arrow">↓</span>
-        <div class="flow-step" data-i18n="flow2">Check Category</div>
-        <span class="flow-arrow">↓</span>
-        <div class="flow-step" data-i18n="flow3">Create if Missing</div>
-        <span class="flow-arrow">↓</span>
-        <div class="flow-step" data-i18n="flow4">Create Channels</div>
-        <span class="flow-arrow">↓</span>
-        <div class="flow-step" data-i18n="flow5">Done</div>
+        <p data-i18n="cat_sub">Create channels directly inside a specified category. Auto-creates category if missing.</p>
       </div>
       <div class="cmd-grid">
         <div class="cmd-card">
-          <div class="cmd-header"><span class="cmd-name">Tcreatechannelcategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div>
+          <div class="cmd-header"><span class="cmd-name">Tcreatechannelcategories / /createchannelcategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
           <p class="cmd-desc" data-i18n="cmd_chancat">Creates text channels inside the specified category.</p>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreatechannelcategories category, name1, name2</code><button class="copy-btn" data-copy="Tcreatechannelcategories category, name1, name2">Copy</button></div></div>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreatechannelcategories raw:Category, Channel1, Channel2</code><button class="copy-btn" data-copy="Tcreatechannelcategories Category, Channel1, Channel2">Copy</button></div></div>
         </div>
         <div class="cmd-card">
-          <div class="cmd-header"><span class="cmd-name">Tcreatevoicecategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div>
+          <div class="cmd-header"><span class="cmd-name">Tcreatevoicecategories / /createvoicecategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
           <p class="cmd-desc" data-i18n="cmd_voicecat">Creates voice channels inside the specified category.</p>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreatevoicecategories category, name1, name2</code><button class="copy-btn" data-copy="Tcreatevoicecategories category, name1, name2">Copy</button></div></div>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreatevoicecategories raw:Category, Voice1, Voice2</code><button class="copy-btn" data-copy="Tcreatevoicecategories Category, Voice1, Voice2">Copy</button></div></div>
         </div>
         <div class="cmd-card">
-          <div class="cmd-header"><span class="cmd-name">Tcreateforumcategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div>
+          <div class="cmd-header"><span class="cmd-name">Tcreateforumcategories / /createforumcategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
           <p class="cmd-desc" data-i18n="cmd_forumcat">Creates forum channels inside the specified category.</p>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreateforumcategories category, name1, name2</code><button class="copy-btn" data-copy="Tcreateforumcategories category, name1, name2">Copy</button></div></div>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tcreateforumcategories raw:Category, Forum1, Forum2</code><button class="copy-btn" data-copy="Tcreateforumcategories Category, Forum1, Forum2">Copy</button></div></div>
         </div>
       </div>
     </div>
 
-    <!-- RENAME -->
+    <!-- RENAME PAGE -->
     <div class="page" id="page-rename">
       <div class="page-header">
         <h1 data-i18n="rename_title">Rename Commands</h1>
@@ -630,29 +490,19 @@ footer {
       </div>
       <div class="cmd-grid">
         <div class="cmd-card">
-          <div class="cmd-header"><span class="cmd-name">Trenamechannel</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_renamech">Rename up to 10 channels at once.</p>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Trenamechannel old, new; old2, new2</code><button class="copy-btn" data-copy="Trenamechannel old, new; old2, new2">Copy</button></div></div>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_example">Example</div><div class="code-block"><code>Trenamechannel general, main-chat; memes, media</code><button class="copy-btn" data-copy="Trenamechannel general, main-chat; memes, media">Copy</button></div></div>
-          <div class="rename-preview">
-            <span class="rename-old">general</span><span class="rename-arrow">→</span><span class="rename-new">main-chat</span>
-            <span class="rename-old">memes</span><span class="rename-arrow">→</span><span class="rename-new">media</span>
-          </div>
+          <div class="cmd-header"><span class="cmd-name">Trenamechannel / /renamechannel</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_renamech">Rename up to 10 channels at once using semicolon separator.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Trenamechannel old, new; old2, new2</code><button class="copy-btn" data-copy="Trenamechannel general, main-chat; memes, media">Copy</button></div></div>
         </div>
         <div class="cmd-card">
-          <div class="cmd-header"><span class="cmd-name">Trenamecategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_renamecat">Rename up to 10 categories at once.</p>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Trenamecategories old, new; old2, new2</code><button class="copy-btn" data-copy="Trenamecategories old, new; old2, new2">Copy</button></div></div>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_example">Example</div><div class="code-block"><code>Trenamecategories COMMUNITY, COMMUNITY CHAT; STAFF, STAFF AREA</code><button class="copy-btn" data-copy="Trenamecategories COMMUNITY, COMMUNITY CHAT; STAFF, STAFF AREA">Copy</button></div></div>
-          <div class="rename-preview">
-            <span class="rename-old">COMMUNITY</span><span class="rename-arrow">→</span><span class="rename-new">COMMUNITY CHAT</span>
-            <span class="rename-old">STAFF</span><span class="rename-arrow">→</span><span class="rename-new">STAFF AREA</span>
-          </div>
+          <div class="cmd-header"><span class="cmd-name">Trenamecategories / /renamecategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_renamecat">Rename up to 10 categories at once using semicolon separator.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Trenamecategories old, new; old2, new2</code><button class="copy-btn" data-copy="Trenamecategories COMMUNITY, COMMUNITY CHAT">Copy</button></div></div>
         </div>
       </div>
     </div>
 
-    <!-- DELETE -->
+    <!-- DELETE PAGE -->
     <div class="page" id="page-delete">
       <div class="page-header">
         <h1 data-i18n="delete_title">Delete Commands</h1>
@@ -660,147 +510,160 @@ footer {
       </div>
       <div class="cmd-grid">
         <div class="cmd-card">
-          <div class="cmd-header"><span class="cmd-name">Tdeleteroles</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div>
+          <div class="cmd-header"><span class="cmd-name">Tdeleteroles / /deleteroles</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
           <p class="cmd-desc" data-i18n="cmd_delroles">Delete roles by mention or name.</p>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tdeleteroles @Role / name</code><button class="copy-btn" data-copy="Tdeleteroles @Role">Copy</button></div></div>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tdeleteroles raw:@Role1, Role2</code><button class="copy-btn" data-copy="Tdeleteroles @Role1">Copy</button></div></div>
         </div>
         <div class="cmd-card">
-          <div class="cmd-header"><span class="cmd-name">Tdeletechannel</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div>
+          <div class="cmd-header"><span class="cmd-name">Tdeletechannel / /deletechannel</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
           <p class="cmd-desc" data-i18n="cmd_delch">Delete channels by mention or name.</p>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tdeletechannel #channel / name</code><button class="copy-btn" data-copy="Tdeletechannel #channel">Copy</button></div></div>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tdeletechannel raw:#channel1, channel2</code><button class="copy-btn" data-copy="Tdeletechannel #channel1">Copy</button></div></div>
         </div>
         <div class="cmd-card">
-          <div class="cmd-header"><span class="cmd-name">Tdeletecategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div>
+          <div class="cmd-header"><span class="cmd-name">Tdeletecategories / /deletecategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
           <p class="cmd-desc" data-i18n="cmd_delcat">Delete categories by ID or name.</p>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tdeletecategories name / id</code><button class="copy-btn" data-copy="Tdeletecategories name">Copy</button></div></div>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tdeletecategories raw:name / id</code><button class="copy-btn" data-copy="Tdeletecategories Cat Name">Copy</button></div></div>
         </div>
         <div class="cmd-card danger">
-          <div class="cmd-header"><span class="cmd-name">Tdeleteallcategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_delallcat">Delete all categories. This action cannot be undone.</p>
-          <div class="confirm-mock">
-            <p data-i18n="confirm_q">Are you sure?</p>
-            <div class="confirm-btns"><button class="btn-cancel" data-i18n="btn_cancel">Cancel</button><button class="btn-yes" data-i18n="btn_yes">Yes, Delete</button></div>
-          </div>
+          <div class="cmd-header"><span class="cmd-name">Tdeleteallchannel / /deleteallchannel</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_delallch">Delete all non-category channels (Yes/No confirmation).</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tdeleteallchannel</code><button class="copy-btn" data-copy="Tdeleteallchannel">Copy</button></div></div>
         </div>
         <div class="cmd-card danger">
-          <div class="cmd-header"><span class="cmd-name">Tdeleteallchannel</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_delallch">Delete all non-category channels. This action cannot be undone.</p>
-          <div class="confirm-mock">
-            <p data-i18n="confirm_q">Are you sure?</p>
-            <div class="confirm-btns"><button class="btn-cancel" data-i18n="btn_cancel">Cancel</button><button class="btn-yes" data-i18n="btn_yes">Yes, Delete</button></div>
-          </div>
+          <div class="cmd-header"><span class="cmd-name">Tdeleteallcategories / /deleteallcategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_delallcat">Delete all categories (Yes/No confirmation).</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tdeleteallcategories</code><button class="copy-btn" data-copy="Tdeleteallcategories">Copy</button></div></div>
         </div>
         <div class="cmd-card danger">
-          <div class="cmd-header"><span class="cmd-name">Tdeleteallroles</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_delallroles">Delete all deletable custom roles. This action cannot be undone.</p>
-          <div class="confirm-mock">
-            <p data-i18n="confirm_q">Are you sure?</p>
-            <div class="confirm-btns"><button class="btn-cancel" data-i18n="btn_cancel">Cancel</button><button class="btn-yes" data-i18n="btn_yes">Yes, Delete</button></div>
-          </div>
-        </div>
-        <div class="cmd-card">
-          <div class="cmd-header"><span class="cmd-name">Tpurge</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_purge">Bulk delete messages. Range: 1–500. Accurately deletes the exact number requested.</p>
-          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tpurge 1-500</code><button class="copy-btn" data-copy="Tpurge 100">Copy</button></div></div>
+          <div class="cmd-header"><span class="cmd-name">Tdeleteallroles / /deleteallroles</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_delallroles">Delete all deletable custom roles (Yes/No confirmation).</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tdeleteallroles</code><button class="copy-btn" data-copy="Tdeleteallroles">Copy</button></div></div>
         </div>
       </div>
     </div>
 
-    <!-- UTILITIES -->
+    <!-- UTILITIES PAGE -->
     <div class="page" id="page-utilities">
       <div class="page-header">
         <h1 data-i18n="util_title">Utility Commands</h1>
-        <p data-i18n="util_sub">Inspect and manage server information with clean interactive utilities.</p>
+        <p data-i18n="util_sub">Inspect and manage server information with interactive utilities.</p>
       </div>
       <div class="cmd-grid">
-        <div class="cmd-card"><div class="cmd-header"><span class="cmd-name">Tlistroles</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div><p class="cmd-desc" data-i18n="cmd_listroles">View a clean, paginated list of all server roles.</p></div>
-        <div class="cmd-card"><div class="cmd-header"><span class="cmd-name">Tlistchannel</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div><p class="cmd-desc" data-i18n="cmd_listch">View a clean, paginated list of text channels.</p></div>
-        <div class="cmd-card"><div class="cmd-header"><span class="cmd-name">Tlistvoice</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div><p class="cmd-desc" data-i18n="cmd_listvoice">View a clean, paginated list of voice channels.</p></div>
-        <div class="cmd-card"><div class="cmd-header"><span class="cmd-name">Tlistforum</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div><p class="cmd-desc" data-i18n="cmd_listforum">View a clean, paginated list of forum channels.</p></div>
-        <div class="cmd-card"><div class="cmd-header"><span class="cmd-name">Tlistcategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div><p class="cmd-desc" data-i18n="cmd_listcat">View a clean, paginated list of categories.</p></div>
         <div class="cmd-card">
-          <div class="cmd-header"><span class="cmd-name">Tlistid</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_listid">Interactive menu for browsing raw IDs. Categories: Channels, Voice, Forum, Categories, Roles.</p>
+          <div class="cmd-header"><span class="cmd-name">Tlistroles / /listroles</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_listroles">View a clean, paginated list of all server roles.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tlistroles</code><button class="copy-btn" data-copy="Tlistroles">Copy</button></div></div>
         </div>
         <div class="cmd-card">
-          <div class="cmd-header"><span class="cmd-name">Tserverinfo</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_serverinfo">Display: Server ID, Owner, Member count, Role count, Channel count, Boost count.</p>
+          <div class="cmd-header"><span class="cmd-name">Tlistchannel / /listchannel</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_listch">View a clean, paginated list of text channels.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tlistchannel</code><button class="copy-btn" data-copy="Tlistchannel">Copy</button></div></div>
         </div>
         <div class="cmd-card">
-          <div class="cmd-header"><span class="cmd-name">Tuserinfo</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_userinfo">Display: Member name, Member ID, Top role, Join date.</p>
+          <div class="cmd-header"><span class="cmd-name">Tlistvoice / /listvoice</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_listvoice">View a clean, paginated list of voice channels.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tlistvoice</code><button class="copy-btn" data-copy="Tlistvoice">Copy</button></div></div>
         </div>
         <div class="cmd-card">
-          <div class="cmd-header"><span class="cmd-name">Tlanguage</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_lang">Switch My Tools language per server. Available: English, Indonesian.</p>
+          <div class="cmd-header"><span class="cmd-name">Tlistforum / /listforum</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_listforum">View a clean, paginated list of forum channels.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tlistforum</code><button class="copy-btn" data-copy="Tlistforum">Copy</button></div></div>
         </div>
         <div class="cmd-card">
-          <div class="cmd-header"><span class="cmd-name">Thelp</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span></div></div>
-          <p class="cmd-desc" data-i18n="cmd_help">Interactive help menu with dropdown categories: Bot Information, Permission Category, Prefix Command, Slash Command, Support.</p>
-          <div class="help-mock">
-            <select><option>Bot Information</option><option>Permission Category</option><option>Prefix Command</option><option>Slash Command</option><option>Support</option></select>
-            <div class="help-content" data-i18n="help_mock">Select a category to view commands and details.</div>
-          </div>
+          <div class="cmd-header"><span class="cmd-name">Tlistcategories / /listcategories</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_listcat">View a clean, paginated list of categories.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tlistcategories</code><button class="copy-btn" data-copy="Tlistcategories">Copy</button></div></div>
+        </div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tlistid / /listid</span><div class="cmd-badges"><span class="badge badge-owner">OWNER</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_listid">Interactive dropdown menu for copying raw IDs.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tlistid</code><button class="copy-btn" data-copy="Tlistid">Copy</button></div></div>
+        </div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tserverinfo / /serverinfo</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_serverinfo">Display server metrics, channels, roles, and boosts.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tserverinfo</code><button class="copy-btn" data-copy="Tserverinfo">Copy</button></div></div>
+        </div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tuserinfo / /userinfo</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_userinfo">Display a member's name, ID, top role, and join date.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tuserinfo [@member]</code><button class="copy-btn" data-copy="Tuserinfo">Copy</button></div></div>
+        </div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Tlanguage / /language</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_lang">Switch language between English (en) and Indonesian (id) via predefined slash choices.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Tlanguage [en/id]</code><button class="copy-btn" data-copy="Tlanguage id">Copy</button></div></div>
+        </div>
+        <div class="cmd-card">
+          <div class="cmd-header"><span class="cmd-name">Thelp / /help</span><div class="cmd-badges"><span class="badge badge-admin">ADMIN</span><span class="badge badge-prefix">PREFIX / SLASH</span></div></div>
+          <p class="cmd-desc" data-i18n="cmd_help">Interactive help menu with category selector dropdown.</p>
+          <div class="cmd-section"><div class="cmd-section-label" data-i18n="label_syntax">Syntax</div><div class="code-block"><code>Thelp</code><button class="copy-btn" data-copy="Thelp">Copy</button></div></div>
         </div>
       </div>
     </div>
 
-    <!-- SLASH -->
+    <!-- SLASH PAGE -->
     <div class="page" id="page-slash">
       <div class="page-header">
         <h1 data-i18n="slash_title">Slash Command Support</h1>
-        <p data-i18n="slash_sub">Almost every My Tools command can also be used as a Discord slash command. Both systems work alongside each other.</p>
-      </div>
-      <div class="compare">
-        <div class="compare-box"><h4 data-i18n="label_prefix">Prefix</h4><code>Tcreatechannel general, chat</code></div>
-        <div class="compare-box"><h4 data-i18n="label_slash">Slash</h4><code>/createchannel</code></div>
+        <p data-i18n="slash_sub">Almost every My Tools command is available as a native Discord slash command.</p>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th data-i18n="th_feature">Feature</th><th>Prefix</th><th>Slash</th></tr></thead>
+          <thead><tr><th data-i18n="th_feature">Category / Feature</th><th>Prefix</th><th>Slash Command</th></tr></thead>
           <tbody>
-            <tr><td data-i18n="nav_create">Create</td><td class="check">✓</td><td class="check">✓</td></tr>
-            <tr><td data-i18n="nav_rename">Rename</td><td class="check">✓</td><td class="check">✓</td></tr>
-            <tr><td data-i18n="nav_delete">Delete</td><td class="check">✓</td><td class="check">✓</td></tr>
-            <tr><td data-i18n="nav_utilities">Utility</td><td class="check">✓</td><td class="check">✓</td></tr>
-            <tr><td>Tlistid</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td data-i18n="nav_moderation">Moderation (kick, ban, mute, unmute, unban, purge)</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td data-i18n="nav_create">Create Commands (Mandatory raw)</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td data-i18n="nav_rename">Rename Commands</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td data-i18n="nav_delete">Delete Commands (Mandatory raw)</td><td class="check">✓</td><td class="check">✓</td></tr>
+            <tr><td data-i18n="nav_utilities">Utility Commands</td><td class="check">✓</td><td class="check">✓</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- PERMISSIONS -->
+    <!-- PERMISSIONS PAGE -->
     <div class="page" id="page-permissions">
       <div class="page-header">
         <h1 data-i18n="perm_title">Permissions & Access</h1>
-        <p data-i18n="perm_sub">Bot Access: Server Owner and Admin. Special bot-developer access is not required for normal server management.</p>
+        <p data-i18n="perm_sub">Understanding permission requirements in My Tools v1.4.2.</p>
       </div>
       <div class="perm-grid">
         <div class="perm-card">
           <h3><span class="badge badge-owner">SERVER OWNER</span></h3>
-          <p data-i18n="perm_owner">Full access to all management commands. Can use create, rename, delete, and utility features.</p>
+          <p data-i18n="perm_owner">Full access to structural commands: create, rename, delete, bulk delete, and raw ID inspection tools.</p>
         </div>
         <div class="perm-card">
-          <h3><span class="badge badge-admin">ADMIN</span></h3>
-          <p data-i18n="perm_admin">Standard administrative access for server setup and bulk operations.</p>
+          <h3><span class="badge badge-admin">ADMINISTRATOR</span></h3>
+          <p data-i18n="perm_admin">Access to moderation commands (kick, ban, mute, unmute, unban, purge), serverinfo, userinfo, language, and help.</p>
         </div>
       </div>
     </div>
 
-    <!-- CHANGELOG -->
+    <!-- CHANGELOG PAGE -->
     <div class="page" id="page-changelog">
       <div class="page-header">
         <h1 data-i18n="cl_title">Changelog</h1>
-        <p data-i18n="cl_sub">Current release: v1.4.1 · Stable</p>
+        <p data-i18n="cl_sub">Release history and update notes.</p>
       </div>
       <div class="timeline">
         <div class="tl-item">
+          <div><span class="tl-version">v1.4.2</span><span class="tl-status">Latest Release</span></div>
+          <ul class="tl-list">
+            <li data-i18n="cl_v142_1">Added Moderation system: Kick, Ban, Mute (Timeout), Unmute, Unban commands.</li>
+            <li data-i18n="cl_v142_2">Made 'raw' parameter mandatory for all slash create and delete commands.</li>
+            <li data-i18n="cl_v142_3">Added interactive choice dropdown list for /language slash command (EN/ID).</li>
+            <li data-i18n="cl_v142_4">Renamed /unban user_id parameter to user for better clarity.</li>
+            <li data-i18n="cl_v142_5">Reorganized interactive help menu (Thelp) with Permission Category moved above Support.</li>
+            <li data-i18n="cl_v142_6">Updated processing responses with cool status indicator text for EN and ID.</li>
+          </ul>
+        </div>
+        <div class="tl-item">
           <div><span class="tl-version">v1.4.1</span><span class="tl-status">Stable</span></div>
           <ul class="tl-list">
-            <li data-i18n="cl_f1">New features and refinements</li>
-            <li data-i18n="cl_f2">Improvements to batch operations</li>
-            <li data-i18n="cl_f3">Bug fixes and stability updates</li>
-            <li data-i18n="cl_f4">Command updates and polish</li>
+            <li data-i18n="cl_v141_1">Multi-language support (English & Indonesian).</li>
+            <li data-i18n="cl_v141_2">Batch channel creation inside categories.</li>
+            <li data-i18n="cl_v141_3">Interactive ID menu (Tlistid).</li>
           </ul>
         </div>
       </div>
@@ -811,16 +674,20 @@ footer {
     <div class="footer-inner">
       <div class="footer-brand">
         <h3>MY TOOLS</h3>
-        <p data-i18n="footer_tag">Discord Server Management Bot</p>
-        <p style="margin-top:0.35rem;font-size:0.8rem;color:var(--text-dim)">Version 1.4.1 · Stable</p>
+        <p data-i18n="footer_tag">Discord Server Management & Moderation Bot</p>
+        <p style="margin-top:0.35rem;font-size:0.8rem;color:var(--text-dim)">Version 1.4.2 · Stable</p>
       </div>
       <div class="footer-nav">
         <a href="#/" data-i18n="nav_home">Home</a>
-        <a href="#/create" data-i18n="nav_features">Features</a>
-        <a href="#/slash" data-i18n="nav_slash">Slash Commands</a>
+        <a href="#/moderation" data-i18n="nav_moderation">Moderation</a>
+        <a href="#/create" data-i18n="nav_create">Create</a>
+        <a href="#/rename" data-i18n="nav_rename">Rename</a>
+        <a href="#/delete" data-i18n="nav_delete">Delete</a>
+        <a href="#/utilities" data-i18n="nav_utilities">Utilities</a>
+        <a href="#/slash" data-i18n="nav_slash">Slash</a>
         <a href="#/permissions" data-i18n="nav_permissions">Permissions</a>
         <a href="#/changelog" data-i18n="nav_changelog">Changelog</a>
-        <a href="https://discord.gg/ntBsr6srWn" target="_blank" rel="noopener" data-i18n="nav_support">Support</a>
+        <a href="https://discord.gg/kF6AG4Cq7s" target="_blank" rel="noopener" data-i18n="nav_support">Support</a>
       </div>
       <div class="footer-copy">© 2026 My Tools. All rights reserved.</div>
     </div>
@@ -831,141 +698,157 @@ footer {
 <script>
 const i18n = {
   en: {
-    logo: "My Tools", nav_home: "Home", nav_features: "Features ▾", nav_create: "Create Commands",
-    nav_categories: "Category Creation", nav_rename: "Rename Commands", nav_delete: "Delete Commands",
-    nav_utilities: "Utility Commands", nav_slash: "Slash Commands",
-    nav_changelog: "Changelog", nav_support: "Support", nav_permissions: "Permissions & Access",
-    hero_badge: "v1.4.1 · Stable", hero_sub: "Discord Server Management Bot",
+    logo: "My Tools", nav_home: "Home", nav_moderation: "Moderation", nav_create: "Create",
+    nav_categories: "Categories", nav_rename: "Rename", nav_delete: "Delete",
+    nav_utilities: "Utilities", nav_slash: "Slash", nav_changelog: "Changelog",
+    nav_support: "Support", nav_permissions: "Permissions",
+    hero_badge: "v1.4.2 · Complete System Update", hero_sub: "Discord Server Management & Moderation Bot",
     hero_desc: "My Tools is a powerful Discord server management bot designed to simplify server creation, organization, moderation utilities, and bulk management.",
     btn_add_server: "Add to Server", btn_official_server: "Official Server", btn_view: "View Commands",
     stat_version: "Current Version", stat_stable: "Stable", stat_status: "Status",
     stat_batch: "Maximum Batch Operations", stat_lang: "Languages",
-    explore_title: "Explore My Tools", explore_sub: "Jump into any feature area.",
+    explore_title: "Explore My Tools Categories", explore_sub: "Select a category below to view all commands.",
+    card_mod: "Kick, ban, mute, unmute, unban, and purge messages.",
     card_create: "Batch create roles, channels, voice, forums & categories.",
     card_cat: "Create channels directly inside categories.",
     card_rename: "Batch rename channels and categories.",
     card_delete: "Safe deletion with confirmation protection.",
-    card_util: "Lists, info, language & interactive help.",
+    card_util: "Lists, server info, language & interactive help.",
     card_slash: "Almost every command also works as slash.",
-    card_perm: "Who can use which features.",
+    card_perm: "Detailed breakdown of Owner & Admin command access.",
+    mod_title: "Moderation Commands", mod_sub: "Essential moderation tools to keep your server safe. Requires Administrator permission.",
+    cmd_kick: "Kick a member from the server with an optional reason.",
+    cmd_ban: "Ban a user from the server by mention or ID, with optional reason and message deletion days.",
+    cmd_mute: "Timeout / Mute a member for a specified duration in minutes (max 28 days).",
+    cmd_unmute: "Remove timeout / unmute a previously muted member.",
+    cmd_unban: "Unban a user from the server using their numeric User ID.",
     create_title: "Create Commands", create_sub: "Create multiple Discord server resources quickly with batch commands.",
-    search_ph: "Search commands…", label_syntax: "Syntax", label_example: "Example",
-    cmd_createroles: "Create up to 10 Discord roles at once. Each role receives a random color. Designed for fast server setup.",
+    label_syntax: "Syntax",
+    cmd_createroles: "Create up to 10 Discord roles at once. Each role receives a random color.",
     cmd_createchannel: "Create up to 10 text channels at once.",
-    cmd_createvoice: "Create up to 10 voice channels.",
-    cmd_createforum: "Create up to 10 forum channels.",
-    cmd_createcategories: "Create up to 10 categories.",
-    cat_title: "Create Inside a Category",
-    cat_sub: "These commands create channels directly inside a specified category. If the category does not exist, My Tools automatically creates it first.",
-    flow1: "Input Category", flow2: "Check Category", flow3: "Create if Missing", flow4: "Create Channels", flow5: "Done",
+    cmd_createvoice: "Create up to 10 voice channels at once.",
+    cmd_createforum: "Create up to 10 forum channels at once.",
+    cmd_createcategories: "Create up to 10 categories at once.",
+    cat_title: "Create Inside a Category", cat_sub: "Create channels directly inside a specified category. Auto-creates category if missing.",
     cmd_chancat: "Creates text channels inside the specified category.",
     cmd_voicecat: "Creates voice channels inside the specified category.",
     cmd_forumcat: "Creates forum channels inside the specified category.",
     rename_title: "Rename Commands", rename_sub: "Batch rename channels and categories in one go.",
-    cmd_renamech: "Rename up to 10 channels at once.", cmd_renamecat: "Rename up to 10 categories at once.",
+    cmd_renamech: "Rename up to 10 channels at once using semicolon separator.",
+    cmd_renamecat: "Rename up to 10 categories at once using semicolon separator.",
     delete_title: "Delete Commands", delete_sub: "Remove server resources with confirmation protection.",
     cmd_delroles: "Delete roles by mention or name.", cmd_delch: "Delete channels by mention or name.",
     cmd_delcat: "Delete categories by ID or name.",
-    cmd_delallcat: "Delete all categories. This action cannot be undone.",
-    cmd_delallch: "Delete all non-category channels. This action cannot be undone.",
-    cmd_delallroles: "Delete all deletable custom roles. This action cannot be undone.",
-    cmd_purge: "Bulk delete messages. Range: 1–500. Accurately deletes the exact number requested.",
-    confirm_q: "Are you sure?", btn_cancel: "Cancel", btn_yes: "Yes, Delete",
-    util_title: "Utility Commands", util_sub: "Inspect and manage server information with clean interactive utilities.",
+    cmd_delallcat: "Delete all categories (Yes/No confirmation).",
+    cmd_delallch: "Delete all non-category channels (Yes/No confirmation).",
+    cmd_delallroles: "Delete all deletable custom roles (Yes/No confirmation).",
+    cmd_purge: "Bulk delete messages in the channel (1 to 500) with confirmation dialog.",
+    util_title: "Utility Commands", util_sub: "Inspect and manage server information with interactive utilities.",
     cmd_listroles: "View a clean, paginated list of all server roles.",
     cmd_listch: "View a clean, paginated list of text channels.",
     cmd_listvoice: "View a clean, paginated list of voice channels.",
     cmd_listforum: "View a clean, paginated list of forum channels.",
     cmd_listcat: "View a clean, paginated list of categories.",
-    cmd_listid: "Interactive menu for browsing raw IDs. Categories: Channels, Voice, Forum, Categories, Roles.",
-    cmd_serverinfo: "Display: Server ID, Owner, Member count, Role count, Channel count, Boost count.",
-    cmd_userinfo: "Display: Member name, Member ID, Top role, Join date.",
-    cmd_lang: "Switch My Tools language per server. Available: English, Indonesian.",
-    cmd_help: "Interactive help menu with dropdown categories: Bot Information, Permission Category, Prefix Command, Slash Command, Support.",
-    help_mock: "Select a category to view commands and details.",
-    slash_title: "Slash Command Support",
-    slash_sub: "Almost every My Tools command can also be used as a Discord slash command. Both systems work alongside each other.",
-    label_prefix: "Prefix", label_slash: "Slash",
-    th_feature: "Feature",
-    perm_title: "Permissions & Access",
-    perm_sub: "Bot Access: Server Owner and Admin. Special bot-developer access is not required for normal server management.",
-    perm_owner: "Full access to all management commands. Can use create, rename, delete, and utility features.",
-    perm_admin: "Standard administrative access for server setup and bulk operations.",
-    cl_title: "Changelog", cl_sub: "Current release: v1.4.1 · Stable",
-    cl_f1: "New features and refinements", cl_f2: "Improvements to batch operations",
-    cl_f3: "Bug fixes and stability updates", cl_f4: "Command updates and polish",
-    footer_tag: "Discord Server Management Bot"
+    cmd_listid: "Interactive dropdown menu for copying raw IDs.",
+    cmd_serverinfo: "Display server metrics, channels, roles, and boosts.",
+    cmd_userinfo: "Display a member's name, ID, top role, and join date.",
+    cmd_lang: "Switch language between English (en) and Indonesian (id) via predefined slash choices.",
+    cmd_help: "Interactive help menu with category selector dropdown.",
+    slash_title: "Slash Command Support", slash_sub: "Almost every My Tools command is available as a native Discord slash command.",
+    th_feature: "Category / Feature",
+    perm_title: "Permissions & Access", perm_sub: "Understanding permission requirements in My Tools v1.4.2.",
+    perm_owner: "Full access to structural commands: create, rename, delete, bulk delete, and raw ID inspection tools.",
+    perm_admin: "Access to moderation commands (kick, ban, mute, unmute, unban, purge), serverinfo, userinfo, language, and help.",
+    cl_title: "Changelog", cl_sub: "Release history and update notes.",
+    cl_v142_1: "Added Moderation system: Kick, Ban, Mute (Timeout), Unmute, Unban commands.",
+    cl_v142_2: "Made 'raw' parameter mandatory for all slash create and delete commands.",
+    cl_v142_3: "Added interactive choice dropdown list for /language slash command (EN/ID).",
+    cl_v142_4: "Renamed /unban user_id parameter to user for better clarity.",
+    cl_v142_5: "Reorganized interactive help menu (Thelp) with Permission Category moved above Support.",
+    cl_v142_6: "Updated processing responses with cool status indicator text for EN and ID.",
+    cl_v141_1: "Multi-language support (English & Indonesian).",
+    cl_v141_2: "Batch channel creation inside categories.",
+    cl_v141_3: "Interactive ID menu (Tlistid).",
+    footer_tag: "Discord Server Management & Moderation Bot"
   },
   id: {
-    logo: "My Tools", nav_home: "Beranda", nav_features: "Fitur ▾", nav_create: "Perintah Buat",
-    nav_categories: "Buat di Kategori", nav_rename: "Perintah Ganti Nama", nav_delete: "Perintah Hapus",
-    nav_utilities: "Perintah Utilitas", nav_slash: "Perintah Slash",
-    nav_changelog: "Catatan Perubahan", nav_support: "Dukungan", nav_permissions: "Izin & Akses",
-    hero_badge: "v1.4.1 · Stabil", hero_sub: "Bot Manajemen Server Discord",
+    logo: "My Tools", nav_home: "Beranda", nav_moderation: "Moderasi", nav_create: "Buat",
+    nav_categories: "Kategori", nav_rename: "Ganti Nama", nav_delete: "Hapus",
+    nav_utilities: "Utilitas", nav_slash: "Slash", nav_changelog: "Catatan Perubahan",
+    nav_support: "Dukungan", nav_permissions: "Izin & Akses",
+    hero_badge: "v1.4.2 · Update Pembaruan Sistem", hero_sub: "Bot Manajemen & Moderasi Server Discord",
     hero_desc: "My Tools adalah bot manajemen server Discord yang kuat untuk menyederhanakan pembuatan server, organisasi, utilitas moderasi, dan manajemen massal.",
     btn_add_server: "Tambah ke Server", btn_official_server: "Server Resmi", btn_view: "Lihat Perintah",
     stat_version: "Versi Saat Ini", stat_stable: "Stabil", stat_status: "Status",
     stat_batch: "Operasi Batch Maksimum", stat_lang: "Bahasa",
-    explore_title: "Jelajahi My Tools", explore_sub: "Masuk ke area fitur mana saja.",
+    explore_title: "Jelajahi Kategori My Tools", explore_sub: "Pilih kategori di bawah untuk melihat semua perintah.",
+    card_mod: "Kick, ban, mute, unmute, unban, dan hapus pesan.",
     card_create: "Buat massal role, channel, voice, forum & kategori.",
     card_cat: "Buat channel langsung di dalam kategori.",
     card_rename: "Ganti nama channel dan kategori secara massal.",
     card_delete: "Penghapusan aman dengan perlindungan konfirmasi.",
-    card_util: "Daftar, info, bahasa & bantuan interaktif.",
+    card_util: "Daftar, info server, bahasa & bantuan interaktif.",
     card_slash: "Hampir semua perintah juga berfungsi sebagai slash.",
-    card_perm: "Siapa yang dapat menggunakan fitur.",
+    card_perm: "Rincian detail akses perintah untuk Owner & Admin.",
+    mod_title: "Perintah Moderasi", mod_sub: "Alat moderasi penting untuk menjaga keamanan server. Membutuhkan izin Administrator.",
+    cmd_kick: "Keluarkan member dari server dengan alasan opsional.",
+    cmd_ban: "Blokir user dari server berdasarkan mention atau ID, dengan alasan opsional.",
+    cmd_mute: "Mematikan suara / timeout member untuk durasi tertentu dalam menit (maksimal 28 hari).",
+    cmd_unmute: "Lepas timeout / unmute member yang sebelumnya dibisukan.",
+    cmd_unban: "Buka blokir user dari server menggunakan ID User berupa angka.",
     create_title: "Perintah Buat", create_sub: "Buat banyak resource server Discord dengan cepat menggunakan perintah batch.",
-    search_ph: "Cari perintah…", label_syntax: "Sintaks", label_example: "Contoh",
-    cmd_createroles: "Buat hingga 10 role Discord sekaligus. Setiap role mendapat warna acak. Dirancang untuk setup server cepat.",
+    label_syntax: "Sintaks",
+    cmd_createroles: "Buat hingga 10 role Discord sekaligus (warna acak).",
     cmd_createchannel: "Buat hingga 10 channel teks sekaligus.",
-    cmd_createvoice: "Buat hingga 10 channel suara.",
-    cmd_createforum: "Buat hingga 10 channel forum.",
-    cmd_createcategories: "Buat hingga 10 kategori.",
-    cat_title: "Buat di Dalam Kategori",
-    cat_sub: "Perintah ini membuat channel langsung di dalam kategori yang ditentukan. Jika kategori tidak ada, My Tools otomatis membuatnya terlebih dahulu.",
-    flow1: "Input Kategori", flow2: "Cek Kategori", flow3: "Buat jika Belum Ada", flow4: "Buat Channel", flow5: "Selesai",
+    cmd_createvoice: "Buat hingga 10 channel suara sekaligus.",
+    cmd_createforum: "Buat hingga 10 channel forum sekaligus.",
+    cmd_createcategories: "Buat hingga 10 kategori sekaligus.",
+    cat_title: "Buat di Dalam Kategori", cat_sub: "Buat channel langsung di dalam kategori yang ditentukan. Otomatis buat kategori jika belum ada.",
     cmd_chancat: "Membuat channel teks di dalam kategori yang ditentukan.",
     cmd_voicecat: "Membuat channel suara di dalam kategori yang ditentukan.",
     cmd_forumcat: "Membuat channel forum di dalam kategori yang ditentukan.",
     rename_title: "Perintah Ganti Nama", rename_sub: "Ganti nama channel dan kategori secara massal sekaligus.",
-    cmd_renamech: "Ganti nama hingga 10 channel sekaligus.", cmd_renamecat: "Ganti nama hingga 10 kategori sekaligus.",
+    cmd_renamech: "Ganti nama hingga 10 channel sekaligus menggunakan pemisah titik koma.",
+    cmd_renamecat: "Ganti nama hingga 10 kategori sekaligus menggunakan pemisah titik koma.",
     delete_title: "Perintah Hapus", delete_sub: "Hapus resource server dengan perlindungan konfirmasi.",
     cmd_delroles: "Hapus role berdasarkan mention atau nama.", cmd_delch: "Hapus channel berdasarkan mention atau nama.",
     cmd_delcat: "Hapus kategori berdasarkan ID atau nama.",
-    cmd_delallcat: "Hapus semua kategori. Tindakan ini tidak dapat dibatalkan.",
-    cmd_delallch: "Hapus semua channel non-kategori. Tindakan ini tidak dapat dibatalkan.",
-    cmd_delallroles: "Hapus semua role kustom yang dapat dihapus. Tindakan ini tidak dapat dibatalkan.",
-    cmd_purge: "Hapus pesan secara massal. Rentang: 1–500. Menghapus tepat jumlah yang diminta.",
-    confirm_q: "Apakah Anda yakin?", btn_cancel: "Batal", btn_yes: "Ya, Hapus",
-    util_title: "Perintah Utilitas", util_sub: "Periksa dan kelola informasi server dengan utilitas interaktif yang bersih.",
+    cmd_delallcat: "Hapus semua kategori (Konfirmasi Ya/Tidak).",
+    cmd_delallch: "Hapus semua channel non-kategori (Konfirmasi Ya/Tidak).",
+    cmd_delallroles: "Hapus semua role kustom yang dapat dihapus (Konfirmasi Ya/Tidak).",
+    cmd_purge: "Hapus pesan massal di channel (1 sampai 500) dengan dialog konfirmasi.",
+    util_title: "Perintah Utilitas", util_sub: "Periksa dan kelola informasi server dengan utilitas interaktif.",
     cmd_listroles: "Lihat daftar role server yang rapi dan terpaginasi.",
     cmd_listch: "Lihat daftar channel teks yang rapi dan terpaginasi.",
     cmd_listvoice: "Lihat daftar channel suara yang rapi dan terpaginasi.",
     cmd_listforum: "Lihat daftar channel forum yang rapi dan terpaginasi.",
     cmd_listcat: "Lihat daftar kategori yang rapi dan terpaginasi.",
-    cmd_listid: "Menu interaktif untuk menjelajahi ID mentah. Kategori: Channel, Voice, Forum, Kategori, Role.",
-    cmd_serverinfo: "Tampilkan: ID Server, Owner, Jumlah member, Jumlah role, Jumlah channel, Jumlah boost.",
-    cmd_userinfo: "Tampilkan: Nama member, ID member, Role teratas, Tanggal bergabung.",
-    cmd_lang: "Ganti bahasa My Tools per server. Tersedia: English, Indonesian.",
-    cmd_help: "Menu bantuan interaktif dengan kategori dropdown: Informasi Bot, Kategori Izin, Perintah Prefix, Perintah Slash, Dukungan.",
-    help_mock: "Pilih kategori untuk melihat perintah dan detail.",
-    slash_title: "Dukungan Perintah Slash",
-    slash_sub: "Hampir setiap perintah My Tools juga dapat digunakan sebagai perintah slash Discord. Kedua sistem bekerja berdampingan.",
-    label_prefix: "Prefix", label_slash: "Slash",
-    th_feature: "Fitur",
-    perm_title: "Izin & Akses",
-    perm_sub: "Akses Bot: Server Owner dan Admin. Akses khusus developer bot tidak diperlukan untuk manajemen server normal.",
-    perm_owner: "Akses penuh ke semua perintah manajemen. Dapat menggunakan fitur buat, ganti nama, hapus, dan utilitas.",
-    perm_admin: "Akses administratif standar untuk setup server dan operasi massal.",
-    cl_title: "Catatan Perubahan", cl_sub: "Rilis saat ini: v1.4.1 · Stabil",
-    cl_f1: "Fitur baru dan penyempurnaan", cl_f2: "Peningkatan operasi batch",
-    cl_f3: "Perbaikan bug dan pembaruan stabilitas", cl_f4: "Pembaruan perintah dan polish",
-    footer_tag: "Bot Manajemen Server Discord"
+    cmd_listid: "Menu dropdown interaktif untuk menyalin ID mentah.",
+    cmd_serverinfo: "Tampilkan metrik server, channel, role, dan boost.",
+    cmd_userinfo: "Tampilkan nama member, ID, role teratas, dan tanggal bergabung.",
+    cmd_lang: "Ganti bahasa antara Bahasa Inggris (en) dan Bahasa Indonesia (id) melalui pilihan dropdown resmi.",
+    cmd_help: "Menu bantuan interaktif dengan dropdown pemilih kategori.",
+    slash_title: "Dukungan Perintah Slash", slash_sub: "Hampir setiap perintah My Tools tersedia sebagai perintah slash resmi Discord.",
+    th_feature: "Kategori / Fitur",
+    perm_title: "Izin & Akses", perm_sub: "Memahami persyaratan izin di My Tools v1.4.2.",
+    perm_owner: "Akses penuh ke perintah struktural: buat, ganti nama, hapus, hapus massal, dan alat inspeksi ID mentah.",
+    perm_admin: "Akses ke perintah moderasi (kick, ban, mute, unmute, unban, purge), serverinfo, userinfo, bahasa, dan bantuan.",
+    cl_title: "Catatan Perubahan", cl_sub: "Riwayat rilis dan catatan pembaruan.",
+    cl_v142_1: "Menambahkan sistem Moderasi: Perintah Kick, Ban, Mute (Timeout), Unmute, Unban.",
+    cl_v142_2: "Mewajibkan parameter 'raw' pada seluruh perintah slash create dan delete.",
+    cl_v142_3: "Menambahkan daftar pilihan opsi resmi untuk perintah slash /language (EN/ID).",
+    cl_v142_4: "Mengubah nama parameter /unban dari user_id menjadi user agar lebih jelas.",
+    cl_v142_5: "Merapikan menu bantuan interaktif (Thelp) dengan memindahkan Kategori Izin ke atas Dukungan.",
+    cl_v142_6: "Memperbarui respon status proses dengan teks yang lebih santai untuk EN dan ID.",
+    cl_v141_1: "Dukungan multi-bahasa (Bahasa Inggris & Indonesia).",
+    cl_v141_2: "Pembuatan channel massal di dalam kategori.",
+    cl_v141_3: "Menu ID Interaktif (Tlistid).",
+    footer_tag: "Bot Manajemen & Moderasi Server Discord"
   }
 };
 
 let currentLang = 'en';
-const pages = ['home','create','categories','rename','delete','utilities','slash','permissions','changelog'];
+const pages = ['home','moderation','create','categories','rename','delete','utilities','slash','permissions','changelog'];
 
 function setLang(lang) {
   currentLang = lang;
@@ -973,14 +856,10 @@ function setLang(lang) {
   const t = i18n[lang];
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
-    if (t[key] !== undefined) {
+    if (t && t[key] !== undefined) {
       if (el.tagName === 'INPUT') el.placeholder = t[key];
       else el.textContent = t[key];
     }
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.dataset.i18nPlaceholder;
-    if (t[key]) el.placeholder = t[key];
   });
   document.documentElement.lang = lang === 'id' ? 'id' : 'en';
 }
@@ -997,8 +876,13 @@ function showPage(name) {
   document.querySelectorAll('.nav-links a, .mobile-menu a').forEach(a => {
     a.classList.toggle('active', a.dataset.page === name);
   });
-  document.getElementById('mobileMenu').classList.remove('open');
+  closeMobileMenu();
   window.scrollTo(0, 0);
+}
+
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.body.classList.remove('menu-open');
 }
 
 function route() {
@@ -1011,13 +895,18 @@ window.addEventListener('hashchange', route);
 route();
 
 document.getElementById('hamburger').addEventListener('click', () => {
-  document.getElementById('mobileMenu').classList.toggle('open');
+  const menu = document.getElementById('mobileMenu');
+  menu.classList.toggle('open');
+  document.body.classList.toggle('menu-open', menu.classList.contains('open'));
 });
 
+// Copy with Clipboard API Fallback (No Hang/Crash)
 document.querySelectorAll('.copy-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    const text = btn.dataset.copy || btn.previousElementSibling?.textContent;
-    navigator.clipboard.writeText(text).then(() => {
+    const text = btn.dataset.copy || btn.previousElementSibling?.textContent || '';
+    if (!text) return;
+
+    function triggerSuccess() {
       btn.textContent = 'Copied';
       btn.classList.add('copied');
       const toast = document.getElementById('toast');
@@ -1027,40 +916,32 @@ document.querySelectorAll('.copy-btn').forEach(btn => {
         btn.classList.remove('copied');
         toast.classList.remove('show');
       }, 1800);
-    });
+    }
+
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(triggerSuccess).catch(() => {
+        fallbackCopy(text, triggerSuccess);
+      });
+    } else {
+      fallbackCopy(text, triggerSuccess);
+    }
   });
 });
 
-// Simple search on create page
-const searchInput = document.getElementById('searchCreate');
-const searchResults = document.getElementById('searchResultsCreate');
-if (searchInput) {
-  searchInput.addEventListener('input', () => {
-    const q = searchInput.value.toLowerCase().trim();
-    if (!q) { searchResults.classList.remove('open'); return; }
-    const cards = document.querySelectorAll('#page-create .cmd-card');
-    let html = '';
-    cards.forEach(card => {
-      const name = card.querySelector('.cmd-name')?.textContent || '';
-      const desc = card.querySelector('.cmd-desc')?.textContent || '';
-      if (name.toLowerCase().includes(q) || desc.toLowerCase().includes(q)) {
-        html += `<div class="search-item" data-cmd="${name}"><div class="name">${name}</div><div class="desc">${desc.slice(0,80)}…</div></div>`;
-      }
-    });
-    searchResults.innerHTML = html || '<div class="search-item"><div class="desc">No results</div></div>';
-    searchResults.classList.add('open');
-    searchResults.querySelectorAll('.search-item[data-cmd]').forEach(item => {
-      item.addEventListener('click', () => {
-        const target = document.querySelector(`#page-create .cmd-card[data-cmd="${item.dataset.cmd}"]`);
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        searchResults.classList.remove('open');
-        searchInput.value = '';
-      });
-    });
-  });
-  document.addEventListener('click', e => {
-    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) searchResults.classList.remove('open');
-  });
+function fallbackCopy(text, callback) {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.left = '-9999px';
+  document.body.appendChild(textArea);
+  textArea.select();
+  try {
+    document.execCommand('copy');
+    callback();
+  } catch (err) {
+    console.error('Copy failed', err);
+  }
+  document.body.removeChild(textArea);
 }
 </script>
 </body>
